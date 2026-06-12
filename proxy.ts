@@ -30,7 +30,7 @@ function isBot(req: NextRequest): boolean {
   return BOT_PATTERNS.some(p => ua.includes(p))
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Bots skip all gates and get full content immediately

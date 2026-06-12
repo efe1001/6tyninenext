@@ -38,6 +38,13 @@ export const getMediaUrl = (firebaseUrl: string): string => {
   }
 
   let path = firebaseUrl
+
+  // Handle gs://bucket/path URIs
+  if (firebaseUrl.startsWith('gs://')) {
+    path = firebaseUrl.replace(/^gs:\/\/[^/]+\//, '')
+    return `${CLOUDFLARE_CDN}/${path}`
+  }
+
   if (firebaseUrl.includes('firebasestorage.googleapis.com')) {
     const match = firebaseUrl.match(/\/o\/(.+?)\?/)
     if (match?.[1]) {
