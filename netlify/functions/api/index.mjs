@@ -1,11 +1,14 @@
 // Netlify Functions v2 — no AWS Lambda 4KB env var limit
-// Static import ensures esbuild bundles express/mongoose/etc. inline
+// createRequire lets esbuild trace CJS requires and bundle npm deps inline
+import { createRequire } from 'module'
+const _require = createRequire(import.meta.url)
+
 let handler
 let initError
 
 try {
-  const handlerModule = await import('./handler.cjs')
-  handler = handlerModule.handler ?? handlerModule.default?.handler
+  const handlerModule = _require('./handler.cjs')
+  handler = handlerModule.handler
 } catch (err) {
   initError = err
   console.error('[API] Module load failed:', err.message, err.stack)
