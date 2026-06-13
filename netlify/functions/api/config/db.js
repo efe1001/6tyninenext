@@ -34,9 +34,8 @@ const connectDB = async () => {
     connectTimeoutMS: 30000,
     retryWrites: true,
     retryReads: true,
-    bufferCommands: false, // Don't buffer when disconnected
-    bufferMaxEntries: 0, // No buffering
-    autoIndex: false, // Disable auto-indexing to reduce load
+    bufferCommands: false,
+    autoIndex: false,
     keepAlive: true,
     keepAliveInitialDelay: 300000, // 5 minutes
   };

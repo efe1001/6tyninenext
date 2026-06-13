@@ -1002,15 +1002,12 @@ const connectMongoDB = async () => {
       }
 
       const connectionOptions = {
-        maxPoolSize: 10, // Maximum number of sockets in the connection pool
-        minPoolSize: 5,  // Minimum number of sockets in the connection pool
+        maxPoolSize: 10,
+        minPoolSize: 5,
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
         connectTimeoutMS: 10000,
         bufferCommands: false,
-        bufferMaxEntries: 0,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
       };
 
       console.log('[MongoDB] Connecting with options:', {
