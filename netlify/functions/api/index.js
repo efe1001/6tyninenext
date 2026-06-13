@@ -19,11 +19,16 @@ if (missingEnvVars.length > 0) {
   console.error('[Server] Missing environment variables:', missingEnvVars);
 }
 
-// Initialize Firebase Admin (once)
+// Initialize Firebase Admin (once) — uses individual env vars to stay under 4KB Lambda limit
 if (!admin.apps.length) {
   try {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        project_id: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        private_key: process.env.FIREBASE_PRIVATE_KEY,
+        client_email: process.env.FIREBASE_CLIENT_EMAIL,
+      }),
+    });
   } catch (err) {
     console.error('[Firebase Admin] Init failed:', err.message);
   }
