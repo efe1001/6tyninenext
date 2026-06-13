@@ -16,10 +16,10 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build and deploy via Netlify CLI
+      - name: Build and deploy (Netlify CLI pulls env vars automatically)
         run: npx netlify-cli deploy --prod --build --auth $NETLIFY_AUTH_TOKEN --site $NETLIFY_SITE_ID
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
