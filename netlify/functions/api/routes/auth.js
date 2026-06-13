@@ -413,7 +413,7 @@ console.log('[Email] Using hardcoded Gmail configuration:', {
 });
 
 // Pusher env validation
-if (!process.env.PUSHER_APP_ID || !process.env.PUSHER_KEY || !process.env.PUSHER_SECRET || !process.env.PUSHER_CLUSTER) {
+if (!process.env.PUSHER_APP_ID || !(process.env.PUSHER_KEY || process.env.NEXT_PUBLIC_PUSHER_KEY) || !process.env.PUSHER_SECRET || !(process.env.PUSHER_CLUSTER || process.env.NEXT_PUBLIC_PUSHER_CLUSTER)) {
   console.error('[Startup] Pusher environment variables are not set');
 }
 
@@ -505,9 +505,9 @@ const initializeEmailTransporter = async () => {
 // Initialize Pusher
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID,
-  key: process.env.PUSHER_KEY,
+  key: process.env.PUSHER_KEY || process.env.NEXT_PUBLIC_PUSHER_KEY,
   secret: process.env.PUSHER_SECRET,
-  cluster: process.env.PUSHER_CLUSTER,
+  cluster: process.env.PUSHER_CLUSTER || process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
   useTLS: true,
 });
 
