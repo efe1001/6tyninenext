@@ -5,8 +5,14 @@ import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import Card from '@/components/features/Card'
 
-export default function SinglePostClient() {
-  const { id } = useParams<{ id: string }>()
+interface Props {
+  postId?: string
+  initialPost?: any
+}
+
+export default function SinglePostClient({ postId: postIdProp }: Props = {}) {
+  const params = useParams<{ id: string }>()
+  const id = postIdProp || params?.id
   const router = useRouter()
   const { currentUser } = useAuth()
   const [post, setPost] = useState<any>(null)

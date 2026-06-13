@@ -124,9 +124,14 @@ const SkeletonCard = () => (
   </div>
 )
 
-export default function HashtagClient() {
+interface HashtagClientProps {
+  hashtag?: string
+  initialPosts?: any[]
+}
+
+export default function HashtagClient({ hashtag: hashtagProp, initialPosts }: HashtagClientProps = {}) {
   const params = useParams<{ hashtag: string }>()
-  const hashtag = params?.hashtag || ''
+  const hashtag = hashtagProp || params?.hashtag || ''
   const router = useRouter()
   const { currentUser, isLoggedIn } = useAuth()
   const [posts, setPosts] = useState<any[]>([])
