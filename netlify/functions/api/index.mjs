@@ -1,13 +1,13 @@
 // Netlify Functions v2 — no AWS Lambda 4KB env var limit
+// Static import ensures esbuild bundles express/mongoose/etc. inline
+import handlerModule from './handler.cjs'
+const { handler } = handlerModule
+
 export const config = {
   path: ['/api', '/api/*'],
 }
 
-// Import CJS handler once; cached across warm invocations
-const handlerPromise = import('./handler.cjs')
-
 export default async (request, context) => {
-  const { handler } = await handlerPromise
 
   const body = await request.arrayBuffer()
   const url = new URL(request.url)
