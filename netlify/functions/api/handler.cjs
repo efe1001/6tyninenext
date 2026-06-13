@@ -96,17 +96,17 @@ app.get('/health', async (req, res) => {
 
 app.get('/', (req, res) => res.json({ message: 'API is running' }));
 
-// Load routes
+// Static requires so esbuild bundles only these 4 routes (not unused route files)
+const authRoutes = require('./routes/auth.js');
+const postsRoutes = require('./routes/posts.js');
+const commentsRoutes = require('./routes/comments.js');
+const usersRoutes = require('./routes/users.js');
+
 const loadRoutes = () => {
-  const routeFiles = ['auth', 'posts', 'comments', 'users'];
-  for (const name of routeFiles) {
-    try {
-      const routeModule = require(`./routes/${name}.js`);
-      app.use(`/api/${name}`, routeModule);
-    } catch (err) {
-      console.error(`[Server] Failed to load route ${name}:`, err.message);
-    }
-  }
+  app.use('/api/auth', authRoutes);
+  app.use('/api/posts', postsRoutes);
+  app.use('/api/comments', commentsRoutes);
+  app.use('/api/users', usersRoutes);
 };
 
 // Global error handler
