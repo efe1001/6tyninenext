@@ -11,3 +11,29 @@
 [functions]
   directory = "netlify/functions"
 
+[functions.api]
+  external_node_modules = [
+    "express",
+    "cors",
+    "mongoose",
+    "firebase-admin",
+    "@supabase/supabase-js",
+    "serverless-http",
+    "jsonwebtoken",
+    "bcryptjs",
+    "pusher",
+    "multer",
+    "nodemailer",
+    "passport",
+    "passport-google-oauth20",
+    "node-fetch",
+    "node-cache",
+    "dotenv",
+    "google-auth-library",
+    "express-rate-limit",
+    "helmet",
+    "compression",
+    "formidable",
+    "mongo-sanitize"
+  ]
+
