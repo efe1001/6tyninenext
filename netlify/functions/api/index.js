@@ -11,8 +11,7 @@ const app = express();
 
 // Validate required env vars — log only, don't crash serverless function
 const requiredEnvVars = [
-  'MONGO_URI', 'SUPABASE_URL', 'SUPABASE_ANON_KEY',
-  'JWT_SECRET', 'KORA_SECRET_KEY', 'FIREBASE_SERVICE_ACCOUNT',
+  'MONGO_URI', 'JWT_SECRET', 'KORA_SECRET_KEY',
 ];
 const missingEnvVars = requiredEnvVars.filter(v => !process.env[v]);
 if (missingEnvVars.length > 0) {
