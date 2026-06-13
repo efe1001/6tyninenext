@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { fetchPublicProfile } from '@/lib/api/server'
 import { AppShell } from '@/components/ui/AppShell'
 import ProfileClient from '@/components/features/ProfileClient'
@@ -42,7 +43,9 @@ export default async function ProfilePage({ params }: Props) {
   // generateMetadata above still fetches for SEO; page renders instantly.
   return (
     <AppShell>
-      <ProfileClient username={username} initialProfile={null} />
+      <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500" /></div>}>
+        <ProfileClient username={username} initialProfile={null} />
+      </Suspense>
     </AppShell>
   )
 }

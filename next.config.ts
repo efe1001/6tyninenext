@@ -7,10 +7,6 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
 
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   turbopack: {
     root: __dirname,
   },
