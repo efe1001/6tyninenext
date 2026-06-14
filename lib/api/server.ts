@@ -5,7 +5,10 @@ const BACKEND = process.env.BACKEND_URL ?? 'http://localhost:8082'
 
 async function safeFetch<T>(url: string, init?: RequestInit): Promise<T | null> {
   try {
-    const res = await fetch(url, init)
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 3000)
+    const res = await fetch(url, { ...init, signal: controller.signal })
+    clearTimeout(timer)
     if (!res.ok) return null
     return res.json() as Promise<T>
   } catch {

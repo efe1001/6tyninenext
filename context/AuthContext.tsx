@@ -52,6 +52,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
+  const CACHE_KEY = 'user_profile_cache'
+  const CACHE_TTL = 5 * 60 * 1000
+
   // Hydrate from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem('token')
@@ -69,9 +72,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           isAdmin: decoded.isAdmin || false,
         } as User)
       } catch {}
-      // Refresh full profile in background
+      // Use sessionStorage cache to avoid Lambda call on every page visit
+      try {
+        const cached = sessionStorage.getItem(CACHE_KEY)
+        if (cached) {
+          const { data, ts } = JSON.parse(cached)
+          if (Date.now() - ts < CACHE_TTL) {
+            setCurrentUser(data as User)
+            return
+          }
+        }
+      } catch {}
+      // Refresh full profile in background (cache miss or expired)
       fetchCurrentUser()
-        .then(user => setCurrentUser(user as User))
+        .then(user => {
+          setCurrentUser(user as User)
+          try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data: user, ts: Date.now() })) } catch {}
+        })
         .catch(() => {
           localStorage.removeItem('token')
           clearAuthCookie()
@@ -99,7 +116,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {}
     // Fetch full profile in background — does not block redirect
     fetchCurrentUser()
-      .then(user => setCurrentUser(user as User))
+      .then(user => {
+        setCurrentUser(user as User)
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data: user, ts: Date.now() })) } catch {}
+      })
       .catch(() => {})
   }, [])
 
@@ -125,6 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('token')
     localStorage.removeItem('adminToken')
     clearAuthCookie()
+    try { sessionStorage.removeItem(CACHE_KEY) } catch {}
     setToken(null)
     setIsLoggedIn(false)
     setCurrentUser(null)
